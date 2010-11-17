@@ -1,0 +1,20 @@
+Some performance tests of Neo4j and Neo4j.rb
+
+The test creates a Neo4j Database by importing file information
+from the filesystem. Then it calculates the total size of all
+those files by traversing the tree in Neo4j.
+
+There are three tests
+* Running the traversal just using the Java API
+* Running the traversal just using the Java API from JRuby
+* Running the traversal using the Neo4j.rb wrapper
+
+=== To Execute
+
+  > bundle 
+  > rake create
+  > rake java  
+  > rake jruby
+  > rake wrapper
+
+
