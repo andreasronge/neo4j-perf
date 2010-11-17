@@ -13,7 +13,6 @@ end
 
 def yes_no(message)
   reply = ask(message + " (y/n) ")
-  puts "GOT REPLY #{reply}"
   reply.first == 'y' || reply.first == 'Y'
 end
 

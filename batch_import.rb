@@ -21,11 +21,13 @@ class BatchImport
   
   def create_folder(name, desc)
     props = {'folder_name' => name, 'description' => desc, '_classname' => 'NeoModel::Folder'}
+    @counter   += 1
     @inserter.create_node(props)
   end
 
   def create_file(name, desc, size)
     props = {'file_name' => name, 'description' => desc, 'size' => size, '_classname' => 'NeoModel::File'}
+    @counter   += 1
     @inserter.create_node(props)
   end
 
@@ -46,7 +48,6 @@ class BatchImport
         putc "d"
         folder               = traverse(path)
         create_rel(folder, parent_folder, 'parent_folder')
-        @counter   += 1
       elsif (FileTest.file?(path))
         putc "-"
         file        = create_file(entry, entry.inspect(), File.size(path))
@@ -65,5 +66,5 @@ end
 db = BatchImport.new
 db.import(ARGV[0])
 
-puts "\nImported #{db.counter} files"
+puts "\nImported #{db.counter} files and folders"
 db.shutdown
