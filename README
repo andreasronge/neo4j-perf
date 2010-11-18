@@ -1,10 +1,11 @@
-Some performance tests of Neo4j and Neo4j.rb
+== Performance tests of Neo4j.rb
 
-The test creates a Neo4j Database by importing file information
-from the filesystem. Then it calculates the total size of all
-those files by traversing the tree in Neo4j.
+The objective of these performance tests is to compare running Neo4j from Java with running it from JRuby.
+I'm sure it's possible to tweak these tests to get even better performance.
 
-There are three tests
+The test creates a Neo4j database by importing file information from the filesystem. Then it calculates the total size of all those files by traversing the tree in Neo4j.
+
+There are three tests:
 * Running the traversal just using the Java API
 * Running the traversal just using the Java API from JRuby
 * Running the traversal using the Neo4j.rb wrapper
@@ -13,6 +14,7 @@ There are three tests
 
 Type:
 
+  > gem install bundler
   > bundle 
   > rake create
   > rake java  
@@ -20,110 +22,113 @@ Type:
   > rake wrapper
 
 rake create asks for an location on the filesystem. You should
-have at least 300.000 folder and files in that location in order to
+have at least 500.000 folder and files in that location in order to
 get some realistic test result.
 
 === My Results
 
-Calling directly the Java API from JRuby is around 6 times slower then just executing everything from Java.
-Running my JRuby wrapper is 50 % slower then directly calling the Java API from JRuby.
-Maybe because I'm extending some java classes from JRuby ???
+Calling directly the Java API from JRuby is around 6-7 times slower then just executing everything from Java.
+Running my JRuby wrapper is around 20 % slower then directly calling the Java API from JRuby.
+Maybe it's because I'm extending some java classes from JRuby or using a code block in a traverser.each |node| ...
 
 It also looks like the bigger graph to traverse the slower JRuby is compared to directly using Java.
 On just traversing 40.000 nodes JRuby is only 3-4 times slower. 
 
 I'm using JRuby 1.5.5 on Ubuntu 32 bit OS, Java version 1.6.0_22
 
-
 === Running from Java
 
 > rake java
 
 java -Xms2048m -Xmx2048m -Xmn512m -server -cp jars/neo4j-kernel-1.2-1.2.M03.jar:jars/geronimo-jta_1.1_spec-1.1.1.jar:target neo4j.NeoTraversal
-1 -- traversed 388511 nodes, 5772133747 bytes, in 7.388 seconds
-2 -- traversed 388511 nodes, 5772133747 bytes, in 0.447 seconds
-3 -- traversed 388511 nodes, 5772133747 bytes, in 0.413 seconds
-4 -- traversed 388511 nodes, 5772133747 bytes, in 0.41 seconds
-5 -- traversed 388511 nodes, 5772133747 bytes, in 0.413 seconds
-6 -- traversed 388511 nodes, 5772133747 bytes, in 0.412 seconds
-7 -- traversed 388511 nodes, 5772133747 bytes, in 0.71 seconds
-8 -- traversed 388511 nodes, 5772133747 bytes, in 0.405 seconds
-9 -- traversed 388511 nodes, 5772133747 bytes, in 0.41 seconds
-10 -- traversed 388511 nodes, 5772133747 bytes, in 0.407 seconds
-11 -- traversed 388511 nodes, 5772133747 bytes, in 0.406 seconds
-12 -- traversed 388511 nodes, 5772133747 bytes, in 0.405 seconds
-13 -- traversed 388511 nodes, 5772133747 bytes, in 0.662 seconds
-14 -- traversed 388511 nodes, 5772133747 bytes, in 0.404 seconds
-15 -- traversed 388511 nodes, 5772133747 bytes, in 0.405 seconds
-16 -- traversed 388511 nodes, 5772133747 bytes, in 0.412 seconds
-17 -- traversed 388511 nodes, 5772133747 bytes, in 0.407 seconds
-18 -- traversed 388511 nodes, 5772133747 bytes, in 0.405 seconds
-19 -- traversed 388511 nodes, 5772133747 bytes, in 0.663 seconds
-20 -- traversed 388511 nodes, 5772133747 bytes, in 0.402 seconds
-21 -- traversed 388511 nodes, 5772133747 bytes, in 0.407 seconds
-22 -- traversed 388511 nodes, 5772133747 bytes, in 0.405 seconds
-23 -- traversed 388511 nodes, 5772133747 bytes, in 0.669 seconds
-24 -- traversed 388511 nodes, 5772133747 bytes, in 0.41 seconds
-25 -- traversed 388511 nodes, 5772133747 bytes, in 0.408 seconds
+1 -- traversed 568291 nodes, 40616985760 bytes, in 9.553 seconds
+2 -- traversed 568291 nodes, 40616985760 bytes, in 0.671 seconds
+3 -- traversed 568291 nodes, 40616985760 bytes, in 0.636 seconds
+4 -- traversed 568291 nodes, 40616985760 bytes, in 1.087 seconds
+5 -- traversed 568291 nodes, 40616985760 bytes, in 0.615 seconds
+6 -- traversed 568291 nodes, 40616985760 bytes, in 0.62 seconds
+7 -- traversed 568291 nodes, 40616985760 bytes, in 0.615 seconds
+8 -- traversed 568291 nodes, 40616985760 bytes, in 0.944 seconds
+9 -- traversed 568291 nodes, 40616985760 bytes, in 0.623 seconds
+10 -- traversed 568291 nodes, 40616985760 bytes, in 0.624 seconds
+11 -- traversed 568291 nodes, 40616985760 bytes, in 0.955 seconds
+12 -- traversed 568291 nodes, 40616985760 bytes, in 0.709 seconds
+13 -- traversed 568291 nodes, 40616985760 bytes, in 1.11 seconds
+14 -- traversed 568291 nodes, 40616985760 bytes, in 0.709 seconds
+15 -- traversed 568291 nodes, 40616985760 bytes, in 0.616 seconds
+16 -- traversed 568291 nodes, 40616985760 bytes, in 0.689 seconds
+17 -- traversed 568291 nodes, 40616985760 bytes, in 0.628 seconds
+18 -- traversed 568291 nodes, 40616985760 bytes, in 0.627 seconds
+19 -- traversed 568291 nodes, 40616985760 bytes, in 0.617 seconds
+20 -- traversed 568291 nodes, 40616985760 bytes, in 0.619 seconds
+21 -- traversed 568291 nodes, 40616985760 bytes, in 0.612 seconds
+22 -- traversed 568291 nodes, 40616985760 bytes, in 0.614 seconds
+23 -- traversed 568291 nodes, 40616985760 bytes, in 0.618 seconds
+24 -- traversed 568291 nodes, 40616985760 bytes, in 0.62 seconds
+25 -- traversed 568291 nodes, 40616985760 bytes, in 0.617 seconds
 
 === Running directly from JRuby
 
 > rake jruby
 
 /usr/bin/env jruby -J-Xms2048m -J-Xmx2048m -J-Xmn512m --server jruby.rb
-1 -- traversed 388511 nodes 5772133747 bytes, in 10.003 seconds
-2 -- traversed 388511 nodes 5772133747 bytes, in 2.7 seconds
-3 -- traversed 388511 nodes 5772133747 bytes, in 4.343 seconds
-4 -- traversed 388511 nodes 5772133747 bytes, in 2.721 seconds
-5 -- traversed 388511 nodes 5772133747 bytes, in 3.095 seconds
-6 -- traversed 388511 nodes 5772133747 bytes, in 3.11 seconds
-7 -- traversed 388511 nodes 5772133747 bytes, in 2.653 seconds
-8 -- traversed 388511 nodes 5772133747 bytes, in 3.085 seconds
-9 -- traversed 388511 nodes 5772133747 bytes, in 3.168 seconds
-10 -- traversed 388511 nodes 5772133747 bytes, in 2.878 seconds
-11 -- traversed 388511 nodes 5772133747 bytes, in 2.825 seconds
-12 -- traversed 388511 nodes 5772133747 bytes, in 2.676 seconds
-13 -- traversed 388511 nodes 5772133747 bytes, in 3.246 seconds
-14 -- traversed 388511 nodes 5772133747 bytes, in 2.531 seconds
-15 -- traversed 388511 nodes 5772133747 bytes, in 3.348 seconds
-16 -- traversed 388511 nodes 5772133747 bytes, in 2.577 seconds
-17 -- traversed 388511 nodes 5772133747 bytes, in 3.081 seconds
-18 -- traversed 388511 nodes 5772133747 bytes, in 2.92 seconds
-19 -- traversed 388511 nodes 5772133747 bytes, in 2.611 seconds
-20 -- traversed 388511 nodes 5772133747 bytes, in 3.433 seconds
-21 -- traversed 388511 nodes 5772133747 bytes, in 2.607 seconds
-22 -- traversed 388511 nodes 5772133747 bytes, in 2.602 seconds
-23 -- traversed 388511 nodes 5772133747 bytes, in 3.463 seconds
-24 -- traversed 388511 nodes 5772133747 bytes, in 2.632 seconds
-25 -- traversed 388511 nodes 5772133747 bytes, in 2.633 seconds
+JRuby limited openssl loaded. http://jruby.org/openssl
+gem install jruby-openssl for full support.
+1 -- traversed 568291 nodes 40616985760 bytes, in 14.459 seconds
+2 -- traversed 568291 nodes 40616985760 bytes, in 5.176 seconds
+3 -- traversed 568291 nodes 40616985760 bytes, in 4.418 seconds
+4 -- traversed 568291 nodes 40616985760 bytes, in 4.449 seconds
+5 -- traversed 568291 nodes 40616985760 bytes, in 4.088 seconds
+6 -- traversed 568291 nodes 40616985760 bytes, in 4.354 seconds
+7 -- traversed 568291 nodes 40616985760 bytes, in 4.712 seconds
+8 -- traversed 568291 nodes 40616985760 bytes, in 4.191 seconds
+9 -- traversed 568291 nodes 40616985760 bytes, in 4.187 seconds
+10 -- traversed 568291 nodes 40616985760 bytes, in 4.253 seconds
+11 -- traversed 568291 nodes 40616985760 bytes, in 4.29 seconds
+12 -- traversed 568291 nodes 40616985760 bytes, in 4.354 seconds
+13 -- traversed 568291 nodes 40616985760 bytes, in 4.36 seconds
+14 -- traversed 568291 nodes 40616985760 bytes, in 4.378 seconds
+15 -- traversed 568291 nodes 40616985760 bytes, in 4.4 seconds
+16 -- traversed 568291 nodes 40616985760 bytes, in 4.403 seconds
+17 -- traversed 568291 nodes 40616985760 bytes, in 3.48 seconds
+18 -- traversed 568291 nodes 40616985760 bytes, in 4.406 seconds
+19 -- traversed 568291 nodes 40616985760 bytes, in 4.399 seconds
+20 -- traversed 568291 nodes 40616985760 bytes, in 4.428 seconds
+21 -- traversed 568291 nodes 40616985760 bytes, in 4.455 seconds
+22 -- traversed 568291 nodes 40616985760 bytes, in 4.445 seconds
+23 -- traversed 568291 nodes 40616985760 bytes, in 4.351 seconds
+24 -- traversed 568291 nodes 40616985760 bytes, in 3.653 seconds
+25 -- traversed 568291 nodes 40616985760 bytes, in 4.475 seconds
 
 === Running from Neo4j.rb wrapper
 
-andreas@andreas-laptop:~/tmp/neo4j-perf$ rake wrapper
-/usr/bin/env jruby -J-Xms2048m -J-Xmx2048m -J-Xmn512m --server wrapper.rb
-1 -- traversed 388510 nodes 5772133747 bytes, in 10.354 seconds
-2 -- traversed 388510 nodes 5772133747 bytes, in 4.439 seconds
-3 -- traversed 388510 nodes 5772133747 bytes, in 3.66 seconds
-4 -- traversed 388510 nodes 5772133747 bytes, in 3.601 seconds
-5 -- traversed 388510 nodes 5772133747 bytes, in 3.555 seconds
-6 -- traversed 388510 nodes 5772133747 bytes, in 3.432 seconds
-7 -- traversed 388510 nodes 5772133747 bytes, in 3.563 seconds
-8 -- traversed 388510 nodes 5772133747 bytes, in 3.324 seconds
-9 -- traversed 388510 nodes 5772133747 bytes, in 3.331 seconds
-10 -- traversed 388510 nodes 5772133747 bytes, in 3.385 seconds
-11 -- traversed 388510 nodes 5772133747 bytes, in 3.675 seconds
-12 -- traversed 388510 nodes 5772133747 bytes, in 3.394 seconds
-13 -- traversed 388510 nodes 5772133747 bytes, in 3.4 seconds
-14 -- traversed 388510 nodes 5772133747 bytes, in 3.437 seconds
-15 -- traversed 388510 nodes 5772133747 bytes, in 3.401 seconds
-16 -- traversed 388510 nodes 5772133747 bytes, in 3.484 seconds
-17 -- traversed 388510 nodes 5772133747 bytes, in 3.403 seconds
-18 -- traversed 388510 nodes 5772133747 bytes, in 3.434 seconds
-19 -- traversed 388510 nodes 5772133747 bytes, in 3.428 seconds
-20 -- traversed 388510 nodes 5772133747 bytes, in 3.423 seconds
-21 -- traversed 388510 nodes 5772133747 bytes, in 3.161 seconds
-22 -- traversed 388510 nodes 5772133747 bytes, in 3.416 seconds
-23 -- traversed 388510 nodes 5772133747 bytes, in 3.415 seconds
-24 -- traversed 388510 nodes 5772133747 bytes, in 3.415 seconds
-25 -- traversed 388510 nodes 5772133747 bytes, in 3.409 seconds
+> rake wrapper
 
+/usr/bin/env jruby -J-Xms2048m -J-Xmx2048m -J-Xmn512m --server wrapper.rb
+JRuby limited openssl loaded. http://jruby.org/openssl
+gem install jruby-openssl for full support.
+1 -- traversed 568290 nodes 40616985760 bytes, in 15.467 seconds
+2 -- traversed 568290 nodes 40616985760 bytes, in 5.66 seconds
+3 -- traversed 568290 nodes 40616985760 bytes, in 5.272 seconds
+4 -- traversed 568290 nodes 40616985760 bytes, in 5.092 seconds
+5 -- traversed 568290 nodes 40616985760 bytes, in 5.12 seconds
+6 -- traversed 568290 nodes 40616985760 bytes, in 4.986 seconds
+7 -- traversed 568290 nodes 40616985760 bytes, in 5.065 seconds
+8 -- traversed 568290 nodes 40616985760 bytes, in 5.026 seconds
+9 -- traversed 568290 nodes 40616985760 bytes, in 5.077 seconds
+10 -- traversed 568290 nodes 40616985760 bytes, in 5.076 seconds
+11 -- traversed 568290 nodes 40616985760 bytes, in 5.006 seconds
+12 -- traversed 568290 nodes 40616985760 bytes, in 4.715 seconds
+13 -- traversed 568290 nodes 40616985760 bytes, in 5.101 seconds
+14 -- traversed 568290 nodes 40616985760 bytes, in 5.166 seconds
+15 -- traversed 568290 nodes 40616985760 bytes, in 5.607 seconds
+16 -- traversed 568290 nodes 40616985760 bytes, in 4.88 seconds
+17 -- traversed 568290 nodes 40616985760 bytes, in 5.19 seconds
+18 -- traversed 568290 nodes 40616985760 bytes, in 5.09 seconds
+19 -- traversed 568290 nodes 40616985760 bytes, in 5.097 seconds
+20 -- traversed 568290 nodes 40616985760 bytes, in 4.776 seconds
+21 -- traversed 568290 nodes 40616985760 bytes, in 5.125 seconds
+22 -- traversed 568290 nodes 40616985760 bytes, in 5.105 seconds
+23 -- traversed 568290 nodes 40616985760 bytes, in 5.086 seconds
+24 -- traversed 568290 nodes 40616985760 bytes, in 4.742 seconds
+25 -- traversed 568290 nodes 40616985760 bytes, in 5.119 seconds

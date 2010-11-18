@@ -8,7 +8,8 @@ require "jars/geronimo-jta_1.1_spec-1.1.1.jar"
 DynamicRelationshipType = org.neo4j.graphdb.DynamicRelationshipType
 Direction               = org.neo4j.graphdb.Direction
 
-DB_PATH = "tmp/neo4j"
+
+DB_PATH = "#{File.dirname(__FILE__)}/tmp/neo4j"
 
 
 class BatchImport
@@ -17,6 +18,7 @@ class BatchImport
   def initialize
     @inserter = org.neo4j.kernel.impl.batchinsert.BatchInserterImpl.new(DB_PATH)
     @counter = 1
+    puts "Creating db at #{DB_PATH}"
   end
   
   def create_folder(name, desc)
@@ -44,7 +46,7 @@ class BatchImport
     parent_folder = create_folder(File.basename(start_path), "Description of folder at #{start_path}")
     Dir.new(start_path).each do |entry|
       path = start_path + "/" + entry
-      if (FileTest.directory?(path) && entry != "." && entry != "..")
+      if (FileTest.directory?(path) && !File.symlink?(path) && entry != "." && entry != ".." && path != DB_PATH)
         putc "d"
         folder               = traverse(path)
         create_rel(folder, parent_folder, 'parent_folder')
@@ -66,5 +68,5 @@ end
 db = BatchImport.new
 db.import(ARGV[0])
 
-puts "\nImported #{db.counter} files and folders"
+puts "\nImported #{db.counter} files and folders to #{DB_PATH}"
 db.shutdown
