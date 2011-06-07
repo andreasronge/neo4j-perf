@@ -50,5 +50,7 @@ end
 
 desc "Run just using JRuby api to Java"
 task :jruby do
-  sh "/usr/bin/env jruby -J-Xms2048m -J-Xmx2048m -J-Xmn512m --server jruby.rb"
+  sh "/usr/bin/env jruby -Xcompile.dynopt=true  -J-Xms2048m -J-Xmx2048m -J-Xmn512m --server jruby.rb"
+
+
 end

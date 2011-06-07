@@ -10,6 +10,13 @@ There are three tests:
 * Running the traversal just using the Java API from JRuby
 * Running the traversal using the Neo4j.rb wrapper
 
+
+=== TODO
+
+Check the JRuby flag if it will increase the performance
+
+  -Xji.objectProxyCache=false 
+
 === To Execute
 
 Type:
