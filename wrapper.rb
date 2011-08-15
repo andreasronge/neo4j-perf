@@ -30,7 +30,7 @@ end
 
 
 trav       = Neo4jTraversal.new
-TIMES      = 25
+TIMES      = 10
 
 total_time = 0
 TIMES.times.each do |i|

@@ -44,13 +44,11 @@ end
 
 desc "Run just using Neo4j.rb wrapper"
 task :wrapper do
-  sh "/usr/bin/env jruby -J-Xms2048m -J-Xmx2048m -J-Xmn512m --server wrapper.rb"
+  sh "/usr/bin/env jruby -J-Xms2048m -J-Xmx2048m -J-Xmn512m wrapper.rb"
 end
 
 
 desc "Run just using JRuby api to Java"
 task :jruby do
-  sh "/usr/bin/env jruby -Xcompile.dynopt=true  -J-Xms2048m -J-Xmx2048m -J-Xmn512m --server jruby.rb"
-
-
+  sh "/usr/bin/env jruby -J-Xms2048m -J-Xmx2048m -J-Xmn512m jruby.rb"
 end
